@@ -131,9 +131,13 @@ public:
     }
     
     SimpleVector& operator=(SimpleVector&& other) {
-        size_ = std::exchange(other.size_, 0);
-        capacity_ = std::exchange(other.capacity_, 0);
-        std::move(other.begin(), other.end(), &items_[0]);
+		if (other.IsEmpty()) {
+    	    Clear();
+    	} else {
+           size_ = std::exchange(other.size_, 0);
+           capacity_ = std::exchange(other.capacity_, 0);
+           std::move(other.begin(), other.end(), &items_[0]);
+		}
         return *this;
     }
     
